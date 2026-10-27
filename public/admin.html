@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Admin Inbox | DreamNest Realty</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .admin-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; }
+    .admin-bar h1 { color: var(--primary); }
+    .counts span { margin-right: 14px; color: var(--muted); }
+    .table-wrap { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 800px; }
+    th, td { padding: 14px 16px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { background: var(--primary); color: var(--white); font-size: 0.9rem; }
+    tr.new td { background: #fffbeb; }
+    td.msg { max-width: 360px; white-space: pre-wrap; word-break: break-word; }
+    .pill { padding: 3px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: 700; }
+    .pill.new { background: #fde68a; color: #92400e; }
+    .pill.read { background: #e5e7eb; color: #374151; }
+    .pill.replied { background: #dcfce7; color: #166534; }
+    .actions { display: flex; gap: 6px; flex-wrap: wrap; }
+    .actions button { padding: 5px 10px; font-size: 0.8rem; border-radius: 6px; border: 1px solid var(--border); background: var(--white); cursor: pointer; }
+    .actions button.danger { color: #dc2626; border-color: #fecaca; }
+    .empty { padding: 40px; text-align: center; color: var(--muted); }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <nav class="container nav">
+      <a href="index.html" class="logo">Dream<span>Nest</span> <small style="font-size:0.9rem;color:#6b7280">Admin</small></a>
+      <button class="btn btn-dark" id="logout-btn" style="display:none;padding:8px 20px">Lock</button>
+    </nav>
+  </header>
+
+  <!-- Key prompt -->
+  <main class="auth-page" id="key-screen">
+    <form class="auth-card" id="key-form">
+      <h1>Admin Inbox</h1>
+      <p class="subtitle">Enter the admin key to view contact messages</p>
+      <div id="key-alert" class="form-alert"></div>
+      <div class="form-group">
+        <label for="admin-key">Admin Key</label>
+        <input type="password" id="admin-key" required>
+      </div>
+      <button type="submit" class="btn btn-dark btn-block">Unlock</button>
+    </form>
+  </main>
+
+  <!-- Inbox -->
+  <section class="section" id="inbox" style="display:none;padding-top:40px">
+    <div class="container">
+      <div class="admin-bar">
+        <h1>Contact Messages</h1>
+        <div class="counts" id="counts"></div>
+        <button class="btn btn-primary" id="refresh-btn" style="padding:8px 18px">↻ Refresh</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Date</th><th>From</th><th>Interest</th><th>Message</th><th>Status</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const keyScreen = document.querySelector("#key-screen");
+    const inbox = document.querySelector("#inbox");
+    const rows = document.querySelector("#rows");
+    const logoutBtn = document.querySelector("#logout-btn");
+    let adminKey = sessionStorage.getItem("adminKey");
+
+    // Messages come from the public, so always escape before inserting into HTML
+    const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+    async function api(url, options = {}) {
+      const res = await fetch(url, {
+        ...options,
+        headers: { "Content-Type": "application/json", "X-Admin-Key": adminKey, ...options.headers },
+      });
+      if (res.status === 401) { lock("Invalid admin key."); throw new Error("Unauthorized"); }
+      if (!res.ok) throw new Error((await res.json()).error || "Request failed");
+      return res.json();
+    }
+
+    function lock(msg) {
+      adminKey = null;
+      sessionStorage.removeItem("adminKey");
+      inbox.style.display = "none";
+      logoutBtn.style.display = "none";
+      keyScreen.style.display = "";
+      const alert = document.querySelector("#key-alert");
+      alert.className = msg ? "form-alert error" : "form-alert";
+      alert.textContent = msg || "";
+    }
+
+    async function load() {
+      const messages = await api("/api/messages");
+      keyScreen.style.display = "none";
+      inbox.style.display = "";
+      logoutBtn.style.display = "";
+
+      const count = (s) => messages.filter((m) => m.status === s).length;
+      document.querySelector("#counts").innerHTML =
+        `<span>Total: <b>${messages.length}</b></span><span>New: <b>${count("new")}</b></span><span>Replied: <b>${count("replied")}</b></span>`;
+
+      if (!messages.length) {
+        rows.innerHTML = '<tr><td colspan="6" class="empty">No messages yet.</td></tr>';
+        return;
+      }
+      rows.innerHTML = messages.map((m) => `
+        <tr class="${m.status === "new" ? "new" : ""}">
+          <td>${esc(new Date(m.created_at + "Z").toLocaleString())}</td>
+          <td><strong>${esc(m.name)}</strong><br><a href="mailto:${esc(m.email)}">${esc(m.email)}</a>${m.phone ? "<br>" + esc(m.phone) : ""}</td>
+          <td>${esc(m.subject)}</td>
+          <td class="msg">${esc(m.message)}</td>
+          <td><span class="pill ${esc(m.status)}">${esc(m.status)}</span></td>
+          <td class="actions">
+            ${m.status !== "read" ? `<button data-id="${m.id}" data-status="read">Mark read</button>` : ""}
+            ${m.status !== "replied" ? `<button data-id="${m.id}" data-status="replied">Replied</button>` : ""}
+            <button class="danger" data-id="${m.id}" data-delete>Delete</button>
+          </td>
+        </tr>`).join("");
+    }
+
+    rows.addEventListener("click", async (e) => {
+      const btn = e.target.closest("button");
+      if (!btn) return;
+      const id = btn.dataset.id;
+      try {
+        if (btn.hasAttribute("data-delete")) {
+          if (!confirm("Delete this message permanently?")) return;
+          await api(`/api/messages/${id}`, { method: "DELETE" });
+        } else {
+          await api(`/api/messages/${id}`, { method: "PATCH", body: JSON.stringify({ status: btn.dataset.status }) });
+        }
+        load();
+      } catch (err) { if (err.message !== "Unauthorized") alert(err.message); }
+    });
+
+    document.querySelector("#key-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      adminKey = document.querySelector("#admin-key").value;
+      sessionStorage.setItem("adminKey", adminKey);
+      load().catch(() => {});
+    });
+    document.querySelector("#refresh-btn").addEventListener("click", () => load().catch(() => {}));
+    logoutBtn.addEventListener("click", () => lock());
+
+    if (adminKey) load().catch(() => {});
+  </script>
+</body>
+</html>

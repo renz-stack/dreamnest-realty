@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | DreamNest Realty</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <header class="header">
+    <nav class="container nav">
+      <a href="index.html" class="logo">Dream<span>Nest</span></a>
+      <button class="nav-toggle" aria-label="Toggle menu">☰</button>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#properties">Properties</a></li>
+        <li><a href="index.html#services">Services</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+        <li><a href="login.html" id="auth-link" class="btn btn-dark">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="auth-page">
+    <div class="auth-card">
+      <h1>Welcome</h1>
+      <p class="subtitle">Sign in to save listings and contact agents</p>
+
+      <div class="auth-tabs">
+        <button class="active" data-target="login-form">Login</button>
+        <button data-target="register-form">Register</button>
+      </div>
+
+      <!-- Login -->
+      <form id="login-form" class="auth-form active" novalidate>
+        <div id="login-alert" class="form-alert"></div>
+        <div class="form-group">
+          <label for="login-email">Email</label>
+          <input type="email" id="login-email" name="email" placeholder="you@example.com">
+          <span class="error-msg"></span>
+        </div>
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <div class="password-wrap">
+            <input type="password" id="login-password" name="password" placeholder="••••••••">
+            <button type="button" class="toggle-pw">Show</button>
+          </div>
+          <span class="error-msg"></span>
+        </div>
+        <div class="form-extra">
+          <label><input type="checkbox" name="remember"> Remember me</label>
+          <a href="#">Forgot password?</a>
+        </div>
+        <button type="submit" class="btn btn-dark btn-block">Login</button>
+        <p class="demo-hint">Demo account: <strong>demo@estate.com</strong> / <strong>demo123</strong></p>
+      </form>
+
+      <!-- Register -->
+      <form id="register-form" class="auth-form" novalidate>
+        <div id="register-alert" class="form-alert"></div>
+        <div class="form-group">
+          <label for="reg-name">Full Name</label>
+          <input type="text" id="reg-name" name="name" placeholder="John Doe">
+          <span class="error-msg"></span>
+        </div>
+        <div class="form-group">
+          <label for="reg-email">Email</label>
+          <input type="email" id="reg-email" name="email" placeholder="you@example.com">
+          <span class="error-msg"></span>
+        </div>
+        <div class="form-group">
+          <label for="reg-password">Password</label>
+          <div class="password-wrap">
+            <input type="password" id="reg-password" name="password" placeholder="At least 6 characters">
+            <button type="button" class="toggle-pw">Show</button>
+          </div>
+          <span class="error-msg"></span>
+        </div>
+        <div class="form-group">
+          <label for="reg-confirm">Confirm Password</label>
+          <input type="password" id="reg-confirm" name="confirm" placeholder="Repeat password">
+          <span class="error-msg"></span>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+      </form>
+    </div>
+  </main>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

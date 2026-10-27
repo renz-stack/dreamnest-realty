@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DreamNest Realty | Find Your Dream Home</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <nav class="container nav">
+      <a href="index.html" class="logo">Dream<span>Nest</span></a>
+      <button class="nav-toggle" aria-label="Toggle menu">☰</button>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="#properties">Properties</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+        <li><a href="login.html" id="auth-link" class="btn btn-dark">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container hero-content">
+      <h1>Find the Home That Fits Your Life</h1>
+      <p>Explore thousands of verified listings — houses, apartments and condos — with trusted local agents ready to help.</p>
+      <div class="hero-buttons">
+        <a href="#properties" class="btn btn-primary">Browse Properties</a>
+        <a href="contact.html" class="btn btn-outline">Talk to an Agent</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Search -->
+  <div class="container">
+    <form class="search-box" id="search-form">
+      <input type="text" name="location" placeholder="City or keyword">
+      <select name="type">
+        <option value="">Any type</option>
+        <option value="house">House</option>
+        <option value="apartment">Apartment</option>
+        <option value="condo">Condo</option>
+      </select>
+      <select name="status">
+        <option value="">Buy or Rent</option>
+        <option value="For Sale">For Sale</option>
+        <option value="For Rent">For Rent</option>
+      </select>
+      <input type="number" name="maxPrice" placeholder="Max price ($)" min="0">
+      <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+  </div>
+
+  <!-- Featured properties -->
+  <section class="section" id="properties">
+    <div class="container">
+      <div class="section-title">
+        <h2>Featured Properties</h2>
+        <p>Hand-picked homes from our latest listings</p>
+      </div>
+      <div class="property-grid" id="property-grid"></div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="stats">
+    <div class="container stats-grid">
+      <div class="stat"><h3>2,500+</h3><p>Properties Listed</p></div>
+      <div class="stat"><h3>1,800+</h3><p>Happy Clients</p></div>
+      <div class="stat"><h3>120</h3><p>Expert Agents</p></div>
+      <div class="stat"><h3>15</h3><p>Years of Experience</p></div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="section" id="services">
+    <div class="container">
+      <div class="section-title">
+        <h2>Why Choose DreamNest</h2>
+        <p>Everything you need to buy, sell or rent — in one place</p>
+      </div>
+      <div class="services-grid">
+        <div class="service">
+          <div class="icon">🏠</div>
+          <h3>Buy a Home</h3>
+          <p>Access verified listings and expert guidance through every step of buying.</p>
+        </div>
+        <div class="service">
+          <div class="icon">🔑</div>
+          <h3>Rent a Home</h3>
+          <p>Find rentals that match your budget and lifestyle with zero hidden fees.</p>
+        </div>
+        <div class="service">
+          <div class="icon">💰</div>
+          <h3>Sell Your Property</h3>
+          <p>Get a free valuation and reach thousands of qualified buyers fast.</p>
+        </div>
+        <div class="service">
+          <div class="icon">📋</div>
+          <h3>Legal Assistance</h3>
+          <p>Our team handles paperwork, contracts and closing so you don't have to.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="section-title">
+        <h2>What Our Clients Say</h2>
+      </div>
+      <div class="testimonial-grid">
+        <div class="testimonial">
+          <p>"DreamNest made buying our first home stress-free. Our agent was patient and knew the market inside out."</p>
+          <strong>Sarah Johnson</strong><span>Homeowner, Austin</span>
+        </div>
+        <div class="testimonial">
+          <p>"Sold my condo in under two weeks and above asking price. Couldn't have asked for a better experience."</p>
+          <strong>Michael Chen</strong><span>Seller, Miami</span>
+        </div>
+        <div class="testimonial">
+          <p>"Found a great apartment downtown within my budget. The search tools are super easy to use."</p>
+          <strong>Priya Patel</strong><span>Renter, New York</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <h2>Ready to Find Your Dream Home?</h2>
+    <p>Create a free account to save favorites and get instant alerts on new listings.</p>
+    <a href="login.html" class="btn btn-dark">Get Started</a>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a href="index.html" class="logo">Dream<span>Nest</span></a>
+          <p>Your trusted partner in finding, buying and selling homes since 2011.</p>
+        </div>
+        <div>
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#properties">Properties</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="login.html">Login</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Services</h4>
+          <ul>
+            <li>Buy</li>
+            <li>Rent</li>
+            <li>Sell</li>
+            <li>Valuation</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Contact</h4>
+          <ul>
+            <li>📍 123 Main Street, New York, NY</li>
+            <li>📞 (555) 123-4567</li>
+            <li>✉️ info@dreamnest.com</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">© <span id="year"></span> DreamNest Realty. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: dreamnest-realty
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: "24"
+      - key: ADMIN_KEY
+        generateValue: true
