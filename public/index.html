@@ -12,8 +12,8 @@
   <header class="header">
     <nav class="container nav">
       <a href="index.html" class="logo">Dream<span>Nest</span></a>
-      <button class="nav-toggle" aria-label="Toggle menu">☰</button>
-      <ul class="nav-links">
+      <button class="nav-toggle" aria-label="Toggle menu" aria-controls="nav-links" aria-expanded="false">☰</button>
+      <ul class="nav-links" id="nav-links">
         <li><a href="index.html" class="active">Home</a></li>
         <li><a href="#properties">Properties</a></li>
         <li><a href="#services">Services</a></li>
@@ -37,20 +37,20 @@
 
   <!-- Search -->
   <div class="container">
-    <form class="search-box" id="search-form">
-      <input type="text" name="location" placeholder="City or keyword">
-      <select name="type">
+    <form class="search-box" id="search-form" role="search" aria-label="Search properties">
+      <input type="text" name="location" placeholder="City or keyword (e.g. Makati)" aria-label="City or keyword">
+      <select name="type" aria-label="Property type">
         <option value="">Any type</option>
         <option value="house">House</option>
-        <option value="apartment">Apartment</option>
         <option value="condo">Condo</option>
+        <option value="townhouse">Townhouse</option>
       </select>
-      <select name="status">
+      <select name="status" aria-label="Buy or rent">
         <option value="">Buy or Rent</option>
         <option value="For Sale">For Sale</option>
         <option value="For Rent">For Rent</option>
       </select>
-      <input type="number" name="maxPrice" placeholder="Max price ($)" min="0">
+      <input type="number" name="maxPrice" placeholder="Max price (₱)" min="0" aria-label="Maximum price in pesos">
       <button type="submit" class="btn btn-primary">Search</button>
     </form>
   </div>
@@ -177,6 +177,7 @@
     </div>
   </footer>
 
+  <script src="js/data/properties.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

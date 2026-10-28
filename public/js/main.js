@@ -1,8 +1,29 @@
-// ===== Mobile nav toggle =====
+// ===== Mobile nav toggle (accessible) =====
 const navToggle = document.querySelector(".nav-toggle");
 const navLinks = document.querySelector(".nav-links");
-if (navToggle) {
-  navToggle.addEventListener("click", () => navLinks.classList.toggle("open"));
+
+function setMenuOpen(open) {
+  navLinks.classList.toggle("open", open);
+  // Tells screen readers whether the menu is currently shown
+  navToggle.setAttribute("aria-expanded", String(open));
+}
+
+if (navToggle && navLinks) {
+  navToggle.setAttribute("aria-expanded", "false");
+  navToggle.addEventListener("click", () => setMenuOpen(!navLinks.classList.contains("open")));
+
+  // Esc closes the menu and puts keyboard focus back on the button
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && navLinks.classList.contains("open")) {
+      setMenuOpen(false);
+      navToggle.focus();
+    }
+  });
+
+  // Close the menu after choosing a link (useful for #section links)
+  navLinks.addEventListener("click", (e) => {
+    if (e.target.closest("a")) setMenuOpen(false);
+  });
 }
 
 // ===== Show logged-in user in nav =====
@@ -22,62 +43,62 @@ if (authLink && currentUser) {
 const yearEl = document.querySelector("#year");
 if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-// ===== Sample property data =====
-const properties = [
-  { title: "Modern Family Villa", location: "Beverly Hills, CA", price: 1250000, beds: 5, baths: 4, area: 3800, type: "house", status: "For Sale", img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800" },
-  { title: "Downtown Luxury Apartment", location: "Manhattan, NY", price: 4500, beds: 2, baths: 2, area: 1200, type: "apartment", status: "For Rent", img: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800" },
-  { title: "Cozy Suburban Home", location: "Austin, TX", price: 485000, beds: 3, baths: 2, area: 2100, type: "house", status: "For Sale", img: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800" },
-  { title: "Beachfront Condo", location: "Miami, FL", price: 3200, beds: 2, baths: 1, area: 950, type: "condo", status: "For Rent", img: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800" },
-  { title: "Penthouse with City View", location: "Chicago, IL", price: 2100000, beds: 4, baths: 3, area: 3200, type: "apartment", status: "For Sale", img: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800" },
-  { title: "Countryside Farmhouse", location: "Nashville, TN", price: 720000, beds: 4, baths: 3, area: 2900, type: "house", status: "For Sale", img: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800" },
-];
+// ===== Shared property helpers =====
+// Used by the Home page now, and by the Properties page later.
+// Data comes from js/data/properties.js, which only some pages load.
+const hasPropertyData = typeof PROPERTIES !== "undefined";
 
-const formatPrice = (p) => "$" + p.price.toLocaleString() + (p.status === "For Rent" ? "/mo" : "");
+// 18500000 -> "₱18,500,000", rentals get "/mo"
+function formatPrice(p) {
+  const peso = "₱" + p.price.toLocaleString("en-PH");
+  return p.status === "For Rent" ? peso + "/mo" : peso;
+}
 
-function renderProperties(list) {
-  const grid = document.querySelector("#property-grid");
-  if (!grid) return;
-  if (list.length === 0) {
-    grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#6b7280">No properties match your search.</p>';
-    return;
-  }
-  grid.innerHTML = list
-    .map(
-      (p) => `
-    <div class="property-card">
+function propertyCardHTML(p) {
+  return `
+    <article class="property-card">
       <div class="property-img">
-        <img src="${p.img}" alt="${p.title}" loading="lazy" onerror="this.style.display='none'">
+        <img src="${p.images[0]}" alt="${p.title} in ${p.city}" loading="lazy" onerror="this.style.display='none'">
         <span class="badge">${p.status}</span>
       </div>
       <div class="property-body">
         <div class="price">${formatPrice(p)}</div>
         <h3>${p.title}</h3>
-        <p class="location">📍 ${p.location}</p>
+        <p class="location">📍 ${p.address}</p>
         <div class="features">
           <span>🛏 ${p.beds} Beds</span>
           <span>🛁 ${p.baths} Baths</span>
-          <span>📐 ${p.area.toLocaleString()} sqft</span>
+          <span>📐 ${p.area} sqm</span>
         </div>
       </div>
-    </div>`
-    )
-    .join("");
+    </article>`;
 }
-renderProperties(properties);
 
-// ===== Search / filter =====
+function renderProperties(list) {
+  const grid = document.querySelector("#property-grid");
+  if (!grid) return;
+  grid.innerHTML = list.length
+    ? list.map(propertyCardHTML).join("")
+    : '<p style="grid-column:1/-1;text-align:center;color:#6b7280">No properties match your search.</p>';
+}
+
+// Home page: show only featured listings at first
+if (hasPropertyData) renderProperties(PROPERTIES.filter((p) => p.featured));
+
+// ===== Search / filter (Home) =====
 const searchForm = document.querySelector("#search-form");
-if (searchForm) {
+if (searchForm && hasPropertyData) {
   searchForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    const loc = searchForm.location.value.trim().toLowerCase();
+    const keyword = searchForm.location.value.trim().toLowerCase();
     const type = searchForm.type.value;
     const status = searchForm.status.value;
     const maxPrice = Number(searchForm.maxPrice.value) || Infinity;
 
-    const filtered = properties.filter(
+    // Search all listings, not just the featured ones
+    const filtered = PROPERTIES.filter(
       (p) =>
-        (!loc || p.location.toLowerCase().includes(loc) || p.title.toLowerCase().includes(loc)) &&
+        (!keyword || [p.title, p.city, p.address].some((text) => text.toLowerCase().includes(keyword))) &&
         (!type || p.type === type) &&
         (!status || p.status === status) &&
         p.price <= maxPrice
