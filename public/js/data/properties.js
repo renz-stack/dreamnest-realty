@@ -11,6 +11,10 @@
 const unsplash = (id, width = 1200) =>
   `https://images.unsplash.com/photo-${id}?w=${width}&auto=format&fit=crop&q=75`;
 
+// Common payment terms, reused by many listings
+const TERMS_SALE = ["Bank financing", "Pag-IBIG housing loan", "Spot cash discount available"];
+const TERMS_RENT = ["1 month advance", "2 months security deposit", "Minimum 1-year lease"];
+
 const AGENTS = [
   {
     id: 1,
@@ -50,9 +54,14 @@ const AGENTS = [
   },
 ];
 
-// type:   "house" | "condo" | "townhouse"
-// status: "For Sale" | "For Rent"   (rent prices are per month)
-// area:   floor area in square meters (sqm); lotArea is for houses only
+// type:        "house" | "condo" | "townhouse"
+// status:      "For Sale" | "For Rent"   (rent prices are per month)
+// area:        floor area in square meters (sqm); lotArea is for houses only
+// floor:       floor level, condos only
+// dues:        monthly association dues in pesos (0 if none)
+// furnishing:  "Fully furnished" | "Semi-furnished" | "Bare"
+// listedOn:    date the listing was posted (YYYY-MM-DD)
+// nearby:      landmarks and their distance
 const PROPERTIES = [
   {
     id: 1,
@@ -66,7 +75,11 @@ const PROPERTIES = [
     baths: 2,
     area: 86,
     parking: 1,
+    floor: 28,
+    dues: 9500,
+    furnishing: "Semi-furnished",
     yearBuilt: 2021,
+    listedOn: "2026-09-14",
     featured: true,
     agentId: 1,
     images: [
@@ -78,6 +91,12 @@ const PROPERTIES = [
     description:
       "A bright corner unit on the 28th floor with floor-to-ceiling windows overlooking the BGC skyline. Walking distance to High Street, international schools and hospitals. Comes semi-furnished with built-in cabinets, split-type aircons and a modern kitchen.",
     amenities: ["Swimming pool", "Gym", "24/7 security", "Function room", "Balcony", "Semi-furnished"],
+    nearby: [
+      { name: "Bonifacio High Street", distance: "0.4 km" },
+      { name: "St. Luke's Medical Center BGC", distance: "1.2 km" },
+      { name: "International School Manila", distance: "1.8 km" },
+    ],
+    terms: TERMS_SALE,
   },
   {
     id: 2,
@@ -91,7 +110,11 @@ const PROPERTIES = [
     baths: 1,
     area: 52,
     parking: 1,
+    floor: 15,
+    dues: 0,
+    furnishing: "Fully furnished",
     yearBuilt: 2019,
+    listedOn: "2026-10-05",
     featured: true,
     agentId: 3,
     images: [
@@ -102,6 +125,12 @@ const PROPERTIES = [
     description:
       "Move-in ready one-bedroom unit in the heart of Makati's business district. Five minutes' walk to Ayala Avenue offices and Legazpi Sunday Market. Includes fast fiber internet, appliances and weekly cleaning. Ideal for young professionals and expats.",
     amenities: ["Fully furnished", "Fiber internet", "Gym", "Lap pool", "Concierge", "Pet-friendly"],
+    nearby: [
+      { name: "Ayala Avenue", distance: "0.5 km" },
+      { name: "Greenbelt Mall", distance: "1.0 km" },
+      { name: "Makati Medical Center", distance: "1.5 km" },
+    ],
+    terms: [...TERMS_RENT, "Association dues included in rent"],
   },
   {
     id: 3,
@@ -116,7 +145,10 @@ const PROPERTIES = [
     area: 420,
     lotArea: 600,
     parking: 3,
+    dues: 6000,
+    furnishing: "Semi-furnished",
     yearBuilt: 2016,
+    listedOn: "2026-08-22",
     featured: true,
     agentId: 2,
     images: [
@@ -128,6 +160,12 @@ const PROPERTIES = [
     description:
       "An elegant two-storey home inside one of the south's most prestigious gated villages. Features a landscaped garden, private pool, maid's quarters and a home office. Close to Alabang Town Center, Festival Mall and top schools.",
     amenities: ["Private pool", "Garden", "Maid's quarters", "Home office", "Gated village", "Solar panels"],
+    nearby: [
+      { name: "Alabang Town Center", distance: "2.0 km" },
+      { name: "Asian Hospital and Medical Center", distance: "3.5 km" },
+      { name: "De La Salle Zobel", distance: "1.5 km" },
+    ],
+    terms: [...TERMS_SALE, "Clean title (TCT) ready for transfer"],
   },
   {
     id: 4,
@@ -142,7 +180,10 @@ const PROPERTIES = [
     area: 210,
     lotArea: 500,
     parking: 2,
+    dues: 0,
+    furnishing: "Fully furnished",
     yearBuilt: 2018,
+    listedOn: "2026-07-30",
     featured: true,
     agentId: 2,
     images: [
@@ -153,6 +194,12 @@ const PROPERTIES = [
     description:
       "Enjoy cool breezes and a direct view of Taal Volcano from this cozy weekend home. Has a wide lanai, fireplace and a big lawn perfect for family gatherings. About 1.5 hours from Manila via CAVITEX and the Santa Rosa–Tagaytay Road.",
     amenities: ["Taal Lake view", "Lanai", "Fireplace", "Big lawn", "Caretaker's room", "Furnished"],
+    nearby: [
+      { name: "Sky Ranch Tagaytay", distance: "3.0 km" },
+      { name: "Tagaytay Picnic Grove", distance: "5.0 km" },
+      { name: "Olivarez Plaza", distance: "4.2 km" },
+    ],
+    terms: TERMS_SALE,
   },
   {
     id: 5,
@@ -166,7 +213,11 @@ const PROPERTIES = [
     baths: 1,
     area: 28,
     parking: 0,
+    floor: 9,
+    dues: 0,
+    furnishing: "Fully furnished",
     yearBuilt: 2022,
+    listedOn: "2026-10-12",
     featured: false,
     agentId: 4,
     images: [
@@ -176,6 +227,12 @@ const PROPERTIES = [
     description:
       "A smart, compact studio a short walk from BPO offices, Ayala Center Cebu and restaurants in IT Park. Fully furnished with a queen bed, work desk and kitchenette. Building has a rooftop pool and co-working lounge.",
     amenities: ["Fully furnished", "Rooftop pool", "Co-working lounge", "24/7 security", "Near offices"],
+    nearby: [
+      { name: "Cebu IT Park offices", distance: "0.3 km" },
+      { name: "Ayala Center Cebu", distance: "2.5 km" },
+      { name: "Chong Hua Hospital Mandaue", distance: "4.0 km" },
+    ],
+    terms: [...TERMS_RENT, "Water and electricity billed separately"],
   },
   {
     id: 6,
@@ -190,7 +247,10 @@ const PROPERTIES = [
     area: 180,
     lotArea: 90,
     parking: 2,
+    dues: 1500,
+    furnishing: "Bare",
     yearBuilt: 2020,
+    listedOn: "2026-09-28",
     featured: true,
     agentId: 1,
     images: [
@@ -201,6 +261,12 @@ const PROPERTIES = [
     description:
       "A modern townhouse in Kapitolyo's famous food neighborhood. Features a roof deck, two-car garage and an open living-dining area. Minutes away from Ortigas Center, BGC and Shangri-La Plaza.",
     amenities: ["Roof deck", "2-car garage", "Open layout", "Near Ortigas", "Gated compound"],
+    nearby: [
+      { name: "Kapitolyo restaurants", distance: "0.2 km" },
+      { name: "Ortigas Center", distance: "2.0 km" },
+      { name: "The Medical City", distance: "2.5 km" },
+    ],
+    terms: [...TERMS_SALE, "In-house financing up to 5 years"],
   },
   {
     id: 7,
@@ -215,7 +281,10 @@ const PROPERTIES = [
     area: 250,
     lotArea: 400,
     parking: 2,
+    dues: 0,
+    furnishing: "Bare",
     yearBuilt: 2012,
+    listedOn: "2026-06-18",
     featured: false,
     agentId: 2,
     images: [
@@ -226,6 +295,12 @@ const PROPERTIES = [
     description:
       "A well-maintained single-level home on a quiet tree-lined street near UP Diliman and Maginhawa Street. Large garden, covered garage and newly renovated kitchen. Perfect for families who want space and accessibility.",
     amenities: ["Garden", "Renovated kitchen", "Covered garage", "Near UP Diliman", "Quiet street"],
+    nearby: [
+      { name: "Maginhawa Street", distance: "0.6 km" },
+      { name: "UP Diliman", distance: "1.5 km" },
+      { name: "UP-Ayala Land TechnoHub", distance: "2.0 km" },
+    ],
+    terms: TERMS_SALE,
   },
   {
     id: 8,
@@ -240,7 +315,10 @@ const PROPERTIES = [
     area: 220,
     lotArea: 350,
     parking: 2,
+    dues: 1200,
+    furnishing: "Semi-furnished",
     yearBuilt: 2017,
+    listedOn: "2026-08-03",
     featured: false,
     agentId: 2,
     images: [
@@ -251,6 +329,12 @@ const PROPERTIES = [
     description:
       "Wake up to a sweeping view of the Metro Manila skyline. This hillside house has a large terrace, high ceilings and a cooler climate than the city. Near Antipolo Cathedral, Hinulugang Taktak and Cloud 9.",
     amenities: ["City view", "Terrace", "High ceilings", "Cool climate", "Gated subdivision"],
+    nearby: [
+      { name: "Antipolo Cathedral", distance: "3.0 km" },
+      { name: "SM City Masinag", distance: "4.5 km" },
+      { name: "Cloud 9 Antipolo", distance: "2.0 km" },
+    ],
+    terms: [...TERMS_SALE, "Rent-to-own option available"],
   },
   {
     id: 9,
@@ -264,7 +348,11 @@ const PROPERTIES = [
     baths: 3,
     area: 165,
     parking: 2,
+    floor: 32,
+    dues: 0,
+    furnishing: "Fully furnished",
     yearBuilt: 2015,
+    listedOn: "2026-10-20",
     featured: false,
     agentId: 3,
     images: [
@@ -275,6 +363,12 @@ const PROPERTIES = [
     description:
       "A premium high-floor unit inside Rockwell Center, steps away from Power Plant Mall. Features a private lift lobby, maid's room and panoramic views of the Pasig River. Ideal for executives and families relocating to Manila.",
     amenities: ["Private lift lobby", "Maid's room", "River view", "Fully furnished", "Lap pool", "Tennis court"],
+    nearby: [
+      { name: "Power Plant Mall", distance: "0.2 km" },
+      { name: "Ateneo Professional Schools", distance: "0.3 km" },
+      { name: "Poblacion, Makati", distance: "1.5 km" },
+    ],
+    terms: [...TERMS_RENT, "Association dues included in rent"],
   },
   {
     id: 10,
@@ -289,7 +383,10 @@ const PROPERTIES = [
     area: 200,
     lotArea: 300,
     parking: 2,
+    dues: 800,
+    furnishing: "Bare",
     yearBuilt: 2019,
+    listedOn: "2026-09-02",
     featured: false,
     agentId: 4,
     images: [
@@ -300,6 +397,12 @@ const PROPERTIES = [
     description:
       "A two-storey home in a safe, family-friendly subdivision, minutes from SM Lanang Premier and Francisco Bangoy International Airport. Includes a spacious kitchen, provision for a home office and a small garden.",
     amenities: ["Subdivision clubhouse", "Garden", "Near airport", "Near mall", "Home office"],
+    nearby: [
+      { name: "SM Lanang Premier", distance: "1.2 km" },
+      { name: "Francisco Bangoy International Airport", distance: "4.0 km" },
+      { name: "Davao Doctors Hospital", distance: "6.0 km" },
+    ],
+    terms: [...TERMS_SALE, "OFW-friendly payment plans"],
   },
   {
     id: 11,
@@ -314,7 +417,10 @@ const PROPERTIES = [
     area: 180,
     lotArea: 320,
     parking: 1,
+    dues: 0,
+    furnishing: "Semi-furnished",
     yearBuilt: 2010,
+    listedOn: "2026-05-25",
     featured: false,
     agentId: 4,
     images: [
@@ -324,6 +430,12 @@ const PROPERTIES = [
     description:
       "A charming home with capiz windows and hardwood floors, inspired by Jaro's old mansions. Close to Jaro Cathedral, schools and the Iloilo Business Park. A rare blend of heritage character and modern comfort.",
     amenities: ["Capiz windows", "Hardwood floors", "Garden", "Near schools", "Quiet neighborhood"],
+    nearby: [
+      { name: "Jaro Cathedral", distance: "0.8 km" },
+      { name: "Iloilo Business Park", distance: "4.0 km" },
+      { name: "Central Philippine University", distance: "1.5 km" },
+    ],
+    terms: TERMS_SALE,
   },
   {
     id: 12,
@@ -338,7 +450,10 @@ const PROPERTIES = [
     area: 550,
     lotArea: 1000,
     parking: 4,
+    dues: 0,
+    furnishing: "Fully furnished",
     yearBuilt: 2020,
+    listedOn: "2026-10-01",
     featured: false,
     agentId: 4,
     images: [
@@ -350,5 +465,11 @@ const PROPERTIES = [
     description:
       "A contemporary villa in an exclusive gated estate with an infinity pool overlooking Cebu City. Five en-suite bedrooms, entertainment room, wine cellar and staff quarters. Available for long-term lease, fully furnished.",
     amenities: ["Infinity pool", "City view", "Wine cellar", "Entertainment room", "Staff quarters", "Fully furnished"],
+    nearby: [
+      { name: "Banilad Town Centre", distance: "2.0 km" },
+      { name: "Cebu Doctors' University Hospital", distance: "5.0 km" },
+      { name: "Cebu IT Park", distance: "4.5 km" },
+    ],
+    terms: ["2 months advance", "3 months security deposit", "Minimum 2-year lease", "Staff salaries not included"],
   },
 ];

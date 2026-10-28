@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Property details, photos, amenities and agent contact.">
+  <title>Property Details | DreamNest Realty</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+
+  <header class="header">
+    <nav class="container nav" aria-label="Main">
+      <a href="index.html" class="logo">Dream<span>Nest</span></a>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-controls="nav-links" aria-expanded="false">☰</button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="properties.html" class="active">Properties</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+        <li><a href="login.html" id="auth-link" class="btn btn-dark">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- js/property.js fills this in based on the ?id= in the URL -->
+  <main id="property-detail" class="container detail-page">
+    <p class="detail-loading">Loading property…</p>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">© <span id="year"></span> DreamNest Realty. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script src="js/data/properties.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/property.js"></script>
+</body>
+</html>

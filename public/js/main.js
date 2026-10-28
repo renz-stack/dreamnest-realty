@@ -54,6 +54,11 @@ function formatPrice(p) {
   return p.status === "For Rent" ? peso + "/mo" : peso;
 }
 
+// 3 -> "DN-0003": the listing reference number shown to clients
+const refCode = (id) => "DN-" + String(id).padStart(4, "0");
+
+// The title link stretches over the whole card (see .card-link in styles.css),
+// so the entire card is clickable but screen readers hear just one link
 function propertyCardHTML(p) {
   return `
     <article class="property-card">
@@ -63,7 +68,7 @@ function propertyCardHTML(p) {
       </div>
       <div class="property-body">
         <div class="price">${formatPrice(p)}</div>
-        <h3>${p.title}</h3>
+        <h3><a href="property.html?id=${p.id}" class="card-link">${p.title}</a></h3>
         <p class="location">📍 ${p.address}</p>
         <div class="features">
           <span>🛏 ${p.beds} Beds</span>
@@ -106,6 +111,15 @@ function showAlert(el, type, msg) {
 // ===== Contact form =====
 const contactForm = document.querySelector("#contact-form");
 if (contactForm) {
+  // Coming from a property's "Inquire" button? e.g. contact.html?property=DN-0003&title=...&status=For+Sale
+  const inquiry = new URLSearchParams(window.location.search);
+  if (inquiry.get("property")) {
+    contactForm.subject.value = inquiry.get("status") === "For Rent" ? "Renting a property" : "Buying a property";
+    contactForm.message.value =
+      `Hi! I'm interested in ${inquiry.get("title") || "this property"} (Ref: ${inquiry.get("property")}). ` +
+      "Could you send me more details and available viewing schedules? Thank you.";
+  }
+
   contactForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const { name, email, phone, message } = contactForm;

@@ -380,3 +380,13 @@ textarea { resize: vertical; min-height: 130px; }
   .form-row { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr; }
 }
+
+/* ===== Clickable property cards ("stretched link") =====
+   The title link's ::after covers the whole card, so clicking anywhere
+   on the card opens the details page, but it's still one real link. */
+.property-card { position: relative; }
+.card-link { color: inherit; }
+.card-link::after { content: ""; position: absolute; inset: 0; z-index: 1; }
+.property-card:hover .card-link { color: var(--accent); }
+.property-card:focus-within { outline: 3px solid var(--accent); outline-offset: 3px; }
+.card-link:focus { outline: none; } /* the whole card shows the outline instead */
