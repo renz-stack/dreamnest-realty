@@ -82,30 +82,11 @@ function renderProperties(list) {
     : '<p style="grid-column:1/-1;text-align:center;color:#6b7280">No properties match your search.</p>';
 }
 
-// Home page: show only featured listings at first
-if (hasPropertyData) renderProperties(PROPERTIES.filter((p) => p.featured));
-
-// ===== Search / filter (Home) =====
-const searchForm = document.querySelector("#search-form");
-if (searchForm && hasPropertyData) {
-  searchForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const keyword = searchForm.location.value.trim().toLowerCase();
-    const type = searchForm.type.value;
-    const status = searchForm.status.value;
-    const maxPrice = Number(searchForm.maxPrice.value) || Infinity;
-
-    // Search all listings, not just the featured ones
-    const filtered = PROPERTIES.filter(
-      (p) =>
-        (!keyword || [p.title, p.city, p.address].some((text) => text.toLowerCase().includes(keyword))) &&
-        (!type || p.type === type) &&
-        (!status || p.status === status) &&
-        p.price <= maxPrice
-    );
-    renderProperties(filtered);
-    document.querySelector("#properties").scrollIntoView({ behavior: "smooth" });
-  });
+// Home page: show only featured listings.
+// (The Home search box is a plain GET form that opens properties.html,
+//  so it needs no JavaScript here.)
+if (hasPropertyData && document.querySelector("#property-grid[data-featured]")) {
+  renderProperties(PROPERTIES.filter((p) => p.featured));
 }
 
 // ===== Shared validation helpers =====

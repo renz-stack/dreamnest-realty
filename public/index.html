@@ -15,7 +15,7 @@
       <button class="nav-toggle" aria-label="Toggle menu" aria-controls="nav-links" aria-expanded="false">☰</button>
       <ul class="nav-links" id="nav-links">
         <li><a href="index.html" class="active">Home</a></li>
-        <li><a href="#properties">Properties</a></li>
+        <li><a href="properties.html">Properties</a></li>
         <li><a href="#services">Services</a></li>
         <li><a href="contact.html">Contact Us</a></li>
         <li><a href="login.html" id="auth-link" class="btn btn-dark">Login</a></li>
@@ -29,7 +29,7 @@
       <h1>Find the Home That Fits Your Life</h1>
       <p>Explore thousands of verified listings — houses, apartments and condos — with trusted local agents ready to help.</p>
       <div class="hero-buttons">
-        <a href="#properties" class="btn btn-primary">Browse Properties</a>
+        <a href="properties.html" class="btn btn-primary">Browse Properties</a>
         <a href="contact.html" class="btn btn-outline">Talk to an Agent</a>
       </div>
     </div>
@@ -37,7 +37,8 @@
 
   <!-- Search -->
   <div class="container">
-    <form class="search-box" id="search-form" role="search" aria-label="Search properties">
+    <!-- Plain HTML form: submitting opens properties.html?location=...&type=... -->
+    <form class="search-box" id="search-form" role="search" aria-label="Search properties" action="properties.html" method="get">
       <input type="text" name="location" placeholder="City or keyword (e.g. Makati)" aria-label="City or keyword">
       <select name="type" aria-label="Property type">
         <option value="">Any type</option>
@@ -62,7 +63,10 @@
         <h2>Featured Properties</h2>
         <p>Hand-picked homes from our latest listings</p>
       </div>
-      <div class="property-grid" id="property-grid"></div>
+      <div class="property-grid" id="property-grid" data-featured></div>
+      <p style="text-align:center;margin-top:36px">
+        <a href="properties.html" class="btn btn-dark">View All Properties</a>
+      </p>
     </div>
   </section>
 
@@ -150,7 +154,7 @@
           <h4>Quick Links</h4>
           <ul>
             <li><a href="index.html">Home</a></li>
-            <li><a href="#properties">Properties</a></li>
+            <li><a href="properties.html">Properties</a></li>
             <li><a href="contact.html">Contact</a></li>
             <li><a href="login.html">Login</a></li>
           </ul>

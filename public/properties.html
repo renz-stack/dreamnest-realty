@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Browse houses, condos and townhouses for sale and for rent across the Philippines.">
+  <title>Properties | DreamNest Realty</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+
+  <header class="header">
+    <nav class="container nav" aria-label="Main">
+      <a href="index.html" class="logo">Dream<span>Nest</span></a>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-controls="nav-links" aria-expanded="false">☰</button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="properties.html" class="active" aria-current="page">Properties</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+        <li><a href="login.html" id="auth-link" class="btn btn-dark">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-banner">
+      <div class="container">
+        <h1>Properties</h1>
+        <p>Houses, condos and townhouses for sale and for rent across the Philippines</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container listings-layout">
+
+        <!-- Filters -->
+        <aside class="filters" aria-labelledby="filters-title">
+          <h2 id="filters-title">Filter Properties</h2>
+          <form id="filter-form">
+            <div class="form-group">
+              <label for="f-location">City or keyword</label>
+              <input type="search" id="f-location" name="location" placeholder="e.g. Makati, condo, pool">
+            </div>
+            <div class="form-group">
+              <label for="f-status">Buy or rent</label>
+              <select id="f-status" name="status">
+                <option value="">All</option>
+                <option value="For Sale">For Sale</option>
+                <option value="For Rent">For Rent</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="f-type">Property type</label>
+              <select id="f-type" name="type">
+                <option value="">Any type</option>
+                <option value="house">House</option>
+                <option value="condo">Condo</option>
+                <option value="townhouse">Townhouse</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="f-beds">Bedrooms</label>
+              <select id="f-beds" name="beds">
+                <option value="">Any</option>
+                <option value="1">1+</option>
+                <option value="2">2+</option>
+                <option value="3">3+</option>
+                <option value="4">4+</option>
+                <option value="5">5+</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="f-price">Max price (₱)</label>
+              <input type="number" id="f-price" name="maxPrice" min="0" step="1000" placeholder="No limit">
+            </div>
+            <button type="reset" class="btn btn-dark btn-block">Clear filters</button>
+          </form>
+        </aside>
+
+        <!-- Results -->
+        <div>
+          <div class="results-bar">
+            <!-- aria-live makes screen readers announce the new count when filters change -->
+            <p id="results-count" aria-live="polite"></p>
+            <div class="sort-group">
+              <label for="sort">Sort by</label>
+              <select id="sort" name="sort" form="filter-form">
+                <option value="featured">Featured</option>
+                <option value="price-asc">Price: low to high</option>
+                <option value="price-desc">Price: high to low</option>
+                <option value="newest">Newest built</option>
+                <option value="size-desc">Largest floor area</option>
+              </select>
+            </div>
+          </div>
+          <div class="property-grid" id="property-grid"></div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">© <span id="year"></span> DreamNest Realty. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script src="js/data/properties.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/properties.js"></script>
+</body>
+</html>
